@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Form view for contracts -->
+        <record id="view_contract_form" model="ir.ui.view">
+            <field name="name">contract.form</field>
+            <field name="model">contract</field>
+            <field name="arch" type="xml">
+                <form string="Contracts" create="false" edit="false">
+                    <header>
+                        <button name="action_publish_contract" type="object" states="draft" string="Publish" groups="base.group_contract_author"/>
+                        <button name="action_approve_contract" type="object" states="published" string="Approve" groups="base.group_contract_worker"/>
+                        <button name="action_complete_contract" type="object" states="assigned" string="Complete" groups="base.group_contract_worker"/>
+                        <button name="action_reject_contract" type="object" states="published,assigned" class="oe_highlight" string="Reject" groups="base.group_contract_author"/>
+                        <button name="action_revise_contract" type="object" states="complete" string="Revise" groups="base.group_contract_author"/>
+                        <button name="action_close_contract" type="object" states="complete" class="oe_highlight" string="Close" groups="base.group_contract_author"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,published,complete,closed"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label string="Name"/>
+                            <field name="name" class="oe_inline"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="author_id"/>
+                                <field name="worker_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="create_date" widget="date"/>
+                                <field name="publish_date" widget="date" attrs="{'invisible': [('state', '!=', 'published')]}"/>
+                                <field name="close_date" widget="date" attrs="{'invisible': [('state', '!=', 'closed')]}"/>
+                                <field name="reject_date" widget="date" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+                            </group>
+                        </group>
+                        <field name="description" placeholder="Add a description..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Author and Manager can create contracts -->
+        <record id="view_contract_form_author" model="ir.ui.view">
+            <field name="name">contract.form.author</field>
+            <field name="model">contract</field>
+            <field name="inherit_id" ref="view_contract_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_contract_manager')), (4, ref('base.group_contract_author'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">true</attribute>
+                    <attribute name="edit">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Manager can change a worker -->
+        <record id="view_contract_form_manager" model="ir.ui.view">
+            <field name="name">contract.form.manager</field>
+            <field name="model">contract</field>
+            <field name="inherit_id" ref="view_contract_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_contract_manager'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='worker_id']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- My contracts -->
+        <record id="view_author_contract_tree" model="ir.ui.view">
+            <field name="name">author.contract</field>
+            <field name="model">contract</field>
+            <field name="arch" type="xml">
+                <tree string="My Contracts" create="false" edit="false" colors="grey:state=='closed';blue:state=='draft';red:state=='rejected';green:state=='assigned'">
+                    <field name="name"/>
+                    <field name="author_id"/>
+                    <field name="worker_id" />
+                    <field name="create_date" />
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Author and Manager can create contracts -->
+        <record id="view_author_contract_tree_access" model="ir.ui.view">
+            <field name="name">author.contract</field>
+            <field name="model">contract</field>
+            <field name="inherit_id" ref="view_author_contract_tree"/>
+            <field name="groups_id" eval="[(4, ref('base.group_contract_manager')), (4, ref('base.group_contract_author'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">true</attribute>
+                    <attribute name="edit">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_my_contract" model="ir.actions.act_window">
+            <field name="name">My Contracts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="contract.view_author_contract_tree"/>
+            <field name="domain">[('state', '!=', 'published')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new contract.
+                </p>
+            </field>
+        </record>
+
+        <!-- Available contracts -->
+        <record id="view_available_contract" model="ir.ui.view">
+            <field name="name">available.contract</field>
+            <field name="model">contract</field>
+            <field name="arch" type="xml">
+                <tree string="Available Contracts" create="false" edit="false">
+                    <field name="name"/>
+                    <field name="author_id"/>
+                    <field name="worker_id" />
+                    <field name="create_date" />
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_available_contract" model="ir.actions.act_window">
+            <field name="name">Available Contracts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="contract.view_available_contract"/>
+            <field name="domain">[('state', '=', 'published')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new contract.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu -->
+
+        <menuitem name="Contracts"
+                  id="main_contract_menu"
+                  groups="base.group_contract_author,base.group_contract_worker,base.group_contract_manager"
+                  sequence="10"/>
+
+        <menuitem id="menu_contract" name="Contracts"
+                  parent="main_contract_menu"/>
+
+        <menuitem sequence="0"
+                  id="menu_my_contract"
+                  parent="menu_contract"
+                  action="action_my_contract"/>
+
+        <menuitem sequence="1"
+                  id="menu_available_contract"
+                  parent="menu_contract"
+                  groups="base.group_contract_worker"
+                  action="action_available_contract"/>
+
+    </data>
+</openerp>

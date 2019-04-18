@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Assigned Email-->
+        <record id="contract_email_template_assigned" model="email.template">
+            <field name="name">Contract is assigned email</field>
+            <field name="email_from">${object.sudo().env.user.company_id.email|safe}</field>
+            <field name="subject">Contract is assigned</field>
+            <field name="email_to"> ${object.author_id.email|safe}</field>
+            <field name="model_id" ref="contract.model_contract"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    <p>Contract «${object.name}» was assigned to user ${object.worker_id.name}.</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Complete Email-->
+        <record id="contract_email_template_complete" model="email.template">
+            <field name="name">Contract is assigned email</field>
+            <field name="email_from">${object.sudo().env.user.company_id.email|safe}</field>
+            <field name="subject">Contract complete</field>
+            <field name="email_to"> ${object.author_id.email|safe}</field>
+            <field name="model_id" ref="contract.model_contract"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    <p>Contract «${object.name}» was complete by ${object.worker_id.name}.</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Rejected Email-->
+        <record id="contract_email_template_rejected" model="email.template">
+            <field name="name">Contract is rejected email</field>
+            <field name="email_from">${object.sudo().env.user.company_id.email|safe}</field>
+            <field name="subject">Contract is rejected</field>
+            <field name="email_to"> ${object.worker_id.email|safe}</field>
+            <field name="model_id" ref="contract.model_contract"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    <p>Contract «${object.name}» was rejected.</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Revised Email-->
+        <record id="contract_email_template_revised" model="email.template">
+            <field name="name">Contract is revised email</field>
+            <field name="email_from">${object.sudo().env.user.company_id.email|safe}</field>
+            <field name="subject">Contract is revised</field>
+            <field name="email_to"> ${object.worker_id.email|safe}</field>
+            <field name="model_id" ref="contract.model_contract"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    <p>Contract «${object.name}» was revised by user.</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Closed Email-->
+        <record id="contract_email_template_closed" model="email.template">
+            <field name="name">Contract is closed email</field>
+            <field name="email_from">${object.sudo().env.user.company_id.email|safe}</field>
+            <field name="subject">Contract is done</field>
+            <field name="email_to"> ${object.worker_id.email|safe}</field>
+            <field name="model_id" ref="contract.model_contract"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    <p>Contract «${object.name}» was done.</p>
+</div>
+            ]]></field>
+        </record>
+    </data>
+</openerp>
