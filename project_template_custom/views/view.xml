@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+        <field name="domain">[('is_template', '!=', True)]</field>
+    </record>
+
+    <record id="project.open_view_project_all_config" model="ir.actions.act_window">
+        <field name="domain">[('is_template', '!=', True)]</field>
+    </record>
+
+    <record id="project_project_view_form_simplified" model="ir.ui.view">
+        <field name="name">project.project.view.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="use_template"/>
+                <field name="template_id" attrs="{'invisible':[('use_template', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="open_view_project_template_all_config" model="ir.actions.act_window">
+        <field name="name">Project Templates</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('is_template', '=', True)]</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('project.view_project')})]"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="context">{'default_is_template': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                Create a new project template
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="open_view_project_template_all_config" id="menu_projects_config" name="Project Templates" parent="project.menu_project_config" sequence="10"/>
+
+</odoo>
