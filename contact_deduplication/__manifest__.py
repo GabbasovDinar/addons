@@ -1,6 +1,6 @@
 {
     "name": "Contact Deduplication",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.1.0",
     "summary": "Contact Deduplicate Extension",
     "author": "Dinar Gabbasov",
     "license": "LGPL-3",
