@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="chatgpt_bot_partner" model="res.partner">
+            <field name="name">ChatGPT Bot</field>
+            <field name="image_1920" type="base64" file="mail_chatgpt_bot/static/src/img/chatgpt_bot.png"/>
+        </record>
+
+    </data>
+</odoo>
